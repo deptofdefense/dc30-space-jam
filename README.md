@@ -13,6 +13,9 @@ git clone --recursive https://github.com/deptofdefense/dc30-space-jam
 
 ![Satellite Jamming Simulator Screenshot Depicting the Globe with a Satellite Orbiting it](img/simulator_screenshot.png)
 
+## Live Demo
+https://literate-robot-5e3d84e1.pages.github.io/
+
 ## About
 This is a fork of the excellent [Satellite Tracker](https://github.com/dsuarezv/satellite-tracker) project by David Suarez.
 
