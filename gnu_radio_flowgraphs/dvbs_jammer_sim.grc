@@ -1,0 +1,1679 @@
+options:
+  parameters:
+    author: ''
+    catch_exceptions: 'True'
+    category: Custom
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: DVB-S2 Jamming Simulator
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: dvbs2_tx_rx
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: DVB-S2 Jamming Simulation
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 4.0]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: Es
+  id: variable
+  parameters:
+    comment: ''
+    value: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1024, 372.0]
+    rotation: 0
+    state: enabled
+- name: EsN0
+  id: variable
+  parameters:
+    comment: ''
+    value: 10 ** (esn0_db / 10)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [952, 372.0]
+    rotation: 0
+    state: enabled
+- name: EsN0_jam
+  id: variable
+  parameters:
+    comment: ''
+    value: 10 ** (esn0_db / 10)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [952, 308.0]
+    rotation: 0
+    state: enabled
+- name: Es_jam
+  id: variable
+  parameters:
+    comment: ''
+    value: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1040, 308.0]
+    rotation: 0
+    state: enabled
+- name: N0
+  id: variable
+  parameters:
+    comment: ''
+    value: Es / EsN0
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1096, 372.0]
+    rotation: 0
+    state: enabled
+- name: N0_jam
+  id: variable
+  parameters:
+    comment: ''
+    value: Es / EsN0
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1120, 308.0]
+    rotation: 0
+    state: enabled
+- name: code_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: modcod.upper().replace("8PSK", "").replace("QPSK", "")
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [704, 212.0]
+    rotation: 0
+    state: enabled
+- name: constellation
+  id: variable
+  parameters:
+    comment: ''
+    value: modcod.replace(code_rate, "")
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [600, 212.0]
+    rotation: 0
+    state: true
+- name: esn0_db
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: tabs@0
+    label: Es/N0 (dB)
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0'
+    step: '0.1'
+    stop: '20'
+    value: snr
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [184, 308.0]
+    rotation: 0
+    state: true
+- name: jammer_power_qtgui_range
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: tabs@5
+    label: jammer power
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0'
+    step: '.1'
+    stop: '50'
+    value: '0'
+    widget: slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 332.0]
+    rotation: 0
+    state: true
+- name: n_rrc_taps
+  id: variable
+  parameters:
+    comment: ''
+    value: int(2*rrc_delay*sps) + 1
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [880, 212.0]
+    rotation: 0
+    state: enabled
+- name: pilot_len
+  id: variable
+  parameters:
+    comment: ''
+    value: int((360-1)/16)*36
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [696, 276.0]
+    rotation: 0
+    state: true
+- name: plframe_len
+  id: variable
+  parameters:
+    comment: ''
+    value: '33282'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [600, 276.0]
+    rotation: 0
+    state: true
+- name: plheader_len
+  id: variable
+  parameters:
+    comment: ''
+    value: '90'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [776, 276.0]
+    rotation: 0
+    state: true
+- name: qtgui_freq_offset
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: tabs@0
+    label: Frequency Offset (Hz)
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: -sym_rate/4
+    step: 1e3
+    stop: sym_rate/4
+    value: freq_offset
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [304, 308.0]
+    rotation: 0
+    state: true
+- name: qtgui_freq_offset_0
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: tabs@5
+    label: Frequency Offset (Hz)
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: -sym_rate/4
+    step: 1e3
+    stop: sym_rate/4
+    value: freq_offset
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1032, 172.0]
+    rotation: 0
+    state: true
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: sym_rate * sps
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [792, 212.0]
+    rotation: 0
+    state: enabled
+- name: signal_power_qtgui_range
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: tabs@0
+    label: signal power
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0'
+    step: '.1'
+    stop: '5'
+    value: '1'
+    widget: slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1144, 4.0]
+    rotation: 0
+    state: true
+- name: agc_gain
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: AGC gain
+    short_id: ''
+    type: eng_float
+    value: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [328, 212.0]
+    rotation: 0
+    state: true
+- name: agc_rate
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: AGC update rate
+    short_id: ''
+    type: eng_float
+    value: 1e-5
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [184, 212.0]
+    rotation: 0
+    state: true
+- name: agc_ref
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: AGC's reference value
+    short_id: ''
+    type: eng_float
+    value: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [432, 212.0]
+    rotation: 0
+    state: true
+- name: blocks_add_xx_0
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1752, 656.0]
+    rotation: 0
+    state: true
+- name: blocks_file_sink_0
+  id: blocks_file_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    append: 'False'
+    comment: ''
+    file: /home/james/sat_jam_demo/output/no_jam.ts
+    type: byte
+    unbuffered: 'True'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2216, 428.0]
+    rotation: 0
+    state: true
+- name: blocks_file_source_0_0
+  id: blocks_file_source
+  parameters:
+    affinity: ''
+    alias: ''
+    begin_tag: pmt.PMT_NIL
+    comment: Legitimate Input
+    file: in_file
+    length: '0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    repeat: 'True'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [32, 468.0]
+    rotation: 0
+    state: enabled
+- name: blocks_file_source_0_0_0
+  id: blocks_file_source
+  parameters:
+    affinity: ''
+    alias: ''
+    begin_tag: pmt.PMT_NIL
+    comment: Jammer Input
+    file: /home/hacked.ts
+    length: '0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    repeat: 'True'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [32, 700.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_const_vxx_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: signal_power_qtgui_range
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1648, 572.0]
+    rotation: 0
+    state: true
+- name: blocks_multiply_const_vxx_0_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: jammer_power_qtgui_range
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1664, 764.0]
+    rotation: 0
+    state: true
+- name: blocks_rotator_cc_foffset_sim
+  id: blocks_rotator_cc
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Simulate frequency offset
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    phase_inc: -2 * pi * (qtgui_freq_offset / samp_rate)
+    tag_inc_update: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1408, 624.0]
+    rotation: 0
+    state: true
+- name: blocks_rotator_cc_foffset_sim_0
+  id: blocks_rotator_cc
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Simulate frequency offset
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    phase_inc: -2 * pi * (qtgui_freq_offset_0 / samp_rate)
+    tag_inc_update: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1432, 720.0]
+    rotation: 0
+    state: true
+- name: blocks_throttle_0
+  id: blocks_throttle
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    ignoretag: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samples_per_second: samp_rate
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [432, 612.0]
+    rotation: 180
+    state: true
+- name: blocks_throttle_0_0
+  id: blocks_throttle
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    ignoretag: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samples_per_second: samp_rate
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [432, 844.0]
+    rotation: 180
+    state: true
+- name: debug
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: debugging level
+    short_id: d
+    type: intx
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [984, 4.0]
+    rotation: 0
+    state: true
+- name: dtv_dvb_bbheader_bb_0
+  id: dtv_dvb_bbheader_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    fecblocks: '168'
+    framesize1: FECFRAME_NORMAL
+    framesize2: FECFRAME_NORMAL
+    inband: INBAND_OFF
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    mode: INPUTMODE_NORMAL
+    rate1: C1_2
+    rate2: C1_3
+    rate3: C1_4
+    rate4: C1_5_MEDIUM
+    rate5: C1_4
+    rolloff: RO_0_20
+    standard: STANDARD_DVBS2
+    tsrate: '4000000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 476.0]
+    rotation: 0
+    state: enabled
+- name: dtv_dvb_bbheader_bb_0_0
+  id: dtv_dvb_bbheader_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    fecblocks: '168'
+    framesize1: FECFRAME_NORMAL
+    framesize2: FECFRAME_NORMAL
+    inband: INBAND_OFF
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    mode: INPUTMODE_NORMAL
+    rate1: C1_2
+    rate2: C1_3
+    rate3: C1_4
+    rate4: C1_5_MEDIUM
+    rate5: C1_4
+    rolloff: RO_0_20
+    standard: STANDARD_DVBS2
+    tsrate: '4000000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 708.0]
+    rotation: 0
+    state: enabled
+- name: dtv_dvb_bbscrambler_bb_0
+  id: dtv_dvb_bbscrambler_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    framesize1: FECFRAME_NORMAL
+    framesize2: FECFRAME_NORMAL
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    rate1: C1_2
+    rate2: C1_3
+    rate3: C1_4
+    rate4: C1_5_MEDIUM
+    rate5: C1_4
+    standard: STANDARD_DVBS2
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [416, 484.0]
+    rotation: 0
+    state: enabled
+- name: dtv_dvb_bbscrambler_bb_0_0
+  id: dtv_dvb_bbscrambler_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    framesize1: FECFRAME_NORMAL
+    framesize2: FECFRAME_NORMAL
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    rate1: C1_2
+    rate2: C1_3
+    rate3: C1_4
+    rate4: C1_5_MEDIUM
+    rate5: C1_4
+    standard: STANDARD_DVBS2
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [416, 716.0]
+    rotation: 0
+    state: enabled
+- name: dtv_dvb_bch_bb_0
+  id: dtv_dvb_bch_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    framesize1: FECFRAME_NORMAL
+    framesize2: FECFRAME_NORMAL
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    rate1: C1_2
+    rate2: C1_3
+    rate3: C1_4
+    rate4: C1_5_MEDIUM
+    rate5: C1_4
+    standard: STANDARD_DVBS2
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [608, 484.0]
+    rotation: 0
+    state: enabled
+- name: dtv_dvb_bch_bb_0_0
+  id: dtv_dvb_bch_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    framesize1: FECFRAME_NORMAL
+    framesize2: FECFRAME_NORMAL
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    rate1: C1_2
+    rate2: C1_3
+    rate3: C1_4
+    rate4: C1_5_MEDIUM
+    rate5: C1_4
+    standard: STANDARD_DVBS2
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [608, 716.0]
+    rotation: 0
+    state: enabled
+- name: dtv_dvb_ldpc_bb_0
+  id: dtv_dvb_ldpc_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    constellation: MOD_OTHER
+    framesize1: FECFRAME_NORMAL
+    framesize2: FECFRAME_NORMAL
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    rate1: C1_2
+    rate2: C1_3
+    rate3: C1_4
+    rate4: C1_5_MEDIUM
+    rate5: C1_4
+    standard: STANDARD_DVBS2
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [816, 476.0]
+    rotation: 0
+    state: enabled
+- name: dtv_dvb_ldpc_bb_0_0
+  id: dtv_dvb_ldpc_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    constellation: MOD_OTHER
+    framesize1: FECFRAME_NORMAL
+    framesize2: FECFRAME_NORMAL
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    rate1: C1_2
+    rate2: C1_3
+    rate3: C1_4
+    rate4: C1_5_MEDIUM
+    rate5: C1_4
+    standard: STANDARD_DVBS2
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [816, 708.0]
+    rotation: 0
+    state: enabled
+- name: dtv_dvbs2_interleaver_bb_0
+  id: dtv_dvbs2_interleaver_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    constellation: MOD_QPSK
+    framesize: FECFRAME_NORMAL
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    rate1: C1_4
+    rate2: C1_5_MEDIUM
+    rate3: C1_4
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1008, 484.0]
+    rotation: 0
+    state: enabled
+- name: dtv_dvbs2_interleaver_bb_0_0
+  id: dtv_dvbs2_interleaver_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    constellation: MOD_QPSK
+    framesize: FECFRAME_NORMAL
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    rate1: C1_4
+    rate2: C1_5_MEDIUM
+    rate3: C1_4
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1008, 716.0]
+    rotation: 0
+    state: enabled
+- name: dtv_dvbs2_modulator_bc_0
+  id: dtv_dvbs2_modulator_bc
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    constellation: MOD_QPSK
+    framesize: FECFRAME_NORMAL
+    interpolation: INTERPOLATION_OFF
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    rate1: C1_4
+    rate2: C1_5_MEDIUM
+    rate3: C1_4
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1008, 588.0]
+    rotation: 180
+    state: enabled
+- name: dtv_dvbs2_modulator_bc_0_0
+  id: dtv_dvbs2_modulator_bc
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    constellation: MOD_QPSK
+    framesize: FECFRAME_NORMAL
+    interpolation: INTERPOLATION_OFF
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    rate1: C1_4
+    rate2: C1_5_MEDIUM
+    rate3: C1_4
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1008, 820.0]
+    rotation: 180
+    state: enabled
+- name: dtv_dvbs2_physical_cc_0
+  id: dtv_dvbs2_physical_cc
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    constellation: MOD_QPSK
+    framesize: FECFRAME_NORMAL
+    goldcode: '0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pilots: PILOTS_ON
+    rate1: C1_4
+    rate2: C1_5_MEDIUM
+    rate3: C1_4
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [816, 580.0]
+    rotation: 180
+    state: enabled
+- name: dtv_dvbs2_physical_cc_0_0
+  id: dtv_dvbs2_physical_cc
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    constellation: MOD_QPSK
+    framesize: FECFRAME_NORMAL
+    goldcode: '0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pilots: PILOTS_ON
+    rate1: C1_4
+    rate2: C1_5_MEDIUM
+    rate3: C1_4
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [816, 812.0]
+    rotation: 180
+    state: enabled
+- name: dvbs2rx_rx_hier_0
+  id: dvbs2rx_rx_hier
+  parameters:
+    affinity: ''
+    agc_gain: agc_gain
+    agc_rate: agc_rate
+    agc_ref: agc_ref
+    alias: ''
+    comment: ''
+    debug: debug
+    frame_size: frame_size
+    gold_code: gold_code
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    modcod: modcod
+    pl_freq_est_period: pl_freq_est_period
+    rolloff: rolloff
+    rrc_delay: rrc_delay
+    rrc_nfilts: rrc_nfilts
+    sps: sps
+    sym_rate: sym_rate
+    sym_sync_damping: sym_sync_damping
+    sym_sync_loop_bw: sym_sync_loop_bw
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1848, 540.0]
+    rotation: 0
+    state: enabled
+- name: frame_size
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: FECFRAME size
+    short_id: f
+    type: str
+    value: normal
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [520, 4.0]
+    rotation: 0
+    state: true
+- name: freq_offset
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: simulated carrier frequency offset in Hz
+    short_id: ''
+    type: eng_float
+    value: '1000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [624, 340.0]
+    rotation: 0
+    state: true
+- name: gold_code
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Gold code
+    short_id: ''
+    type: intx
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [880, 4.0]
+    rotation: 0
+    state: true
+- name: import_0
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: from math import pi, sqrt
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 116.0]
+    rotation: 0
+    state: true
+- name: in_file
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: path to input file containing an MPEG TS stream
+    short_id: ''
+    type: str
+    value: /home/benign.ts
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [784, 340.0]
+    rotation: 0
+    state: true
+- name: interp_fir_filter_xxx_0
+  id: interp_fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    interp: int(sps / 2)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_delay: '0'
+    taps: firdes.root_raised_cosine(sps, samp_rate, sym_rate, rolloff, n_rrc_taps)
+    type: ccf
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [600, 604.0]
+    rotation: 180
+    state: true
+- name: interp_fir_filter_xxx_0_0
+  id: interp_fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    interp: int(sps / 2)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_delay: '0'
+    taps: firdes.root_raised_cosine(sps, samp_rate, sym_rate, rolloff, n_rrc_taps)
+    type: ccf
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [600, 836.0]
+    rotation: 180
+    state: true
+- name: modcod
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: MODCOD
+    short_id: m
+    type: str
+    value: QPSK1/4
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [776, 4.0]
+    rotation: 0
+    state: true
+- name: pl_freq_est_period
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: PL synchronizer's frequency estimation period in frames
+    short_id: ''
+    type: intx
+    value: '20'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [512, 116.0]
+    rotation: 0
+    state: true
+- name: qtgui_const_sink_x_1
+  id: qtgui_const_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: '"blue"'
+    color10: '"red"'
+    color2: '"red"'
+    color3: '"red"'
+    color4: '"red"'
+    color5: '"red"'
+    color6: '"red"'
+    color7: '"red"'
+    color8: '"red"'
+    color9: '"red"'
+    comment: ''
+    grid: 'False'
+    gui_hint: tabs@4
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'False'
+    marker1: '0'
+    marker10: '0'
+    marker2: '0'
+    marker3: '0'
+    marker4: '0'
+    marker5: '0'
+    marker6: '0'
+    marker7: '0'
+    marker8: '0'
+    marker9: '0'
+    name: '"PL Sync Output"'
+    nconnections: '1'
+    size: '1024'
+    style1: '0'
+    style10: '0'
+    style2: '0'
+    style3: '0'
+    style4: '0'
+    style5: '0'
+    style6: '0'
+    style7: '0'
+    style8: '0'
+    style9: '0'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    xmax: '2'
+    xmin: '-2'
+    ymax: '2'
+    ymin: '-2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2216, 588.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_const_sink_x_1_0
+  id: qtgui_const_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: '"blue"'
+    color10: '"red"'
+    color2: '"red"'
+    color3: '"red"'
+    color4: '"red"'
+    color5: '"red"'
+    color6: '"red"'
+    color7: '"red"'
+    color8: '"red"'
+    color9: '"red"'
+    comment: ''
+    grid: 'False'
+    gui_hint: tabs@2
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'False'
+    marker1: '0'
+    marker10: '0'
+    marker2: '0'
+    marker3: '0'
+    marker4: '0'
+    marker5: '0'
+    marker6: '0'
+    marker7: '0'
+    marker8: '0'
+    marker9: '0'
+    name: '"Symbol Sync Output"'
+    nconnections: '1'
+    size: '1024'
+    style1: '0'
+    style10: '0'
+    style2: '0'
+    style3: '0'
+    style4: '0'
+    style5: '0'
+    style6: '0'
+    style7: '0'
+    style8: '0'
+    style9: '0'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    xmax: '2'
+    xmin: '-2'
+    ymax: '2'
+    ymin: '-2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2216, 508.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_freq_sink_x_0
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '0.05'
+    axislabels: 'True'
+    bw: samp_rate
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    ctrlpanel: 'False'
+    fc: '0'
+    fftsize: '1024'
+    freqhalf: 'True'
+    grid: 'True'
+    gui_hint: tabs@1
+    label: Relative Gain
+    label1: Before
+    label10: ''''''
+    label2: After
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '"Frequency Correction"'
+    nconnections: '2'
+    norm_window: 'False'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: complex
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    wintype: window.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2216, 756.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_time_sink_x_1
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'True'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: ''
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'True'
+    gui_hint: tabs@3
+    label1: I
+    label10: Signal 10
+    label2: Q
+    label3: Signal 3
+    label4: Signal 4
+    label5: Signal 5
+    label6: Signal 6
+    label7: Signal 7
+    label8: Signal 8
+    label9: Signal 9
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '""'
+    nconnections: '1'
+    size: plframe_len - pilot_len - plheader_len
+    srate: sym_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: PLFRAME Symbols
+    ymax: '1'
+    ymin: '-1'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2216, 668.0]
+    rotation: 0
+    state: enabled
+- name: rolloff
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: rolloff factor
+    short_id: r
+    type: eng_float
+    value: '0.2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [656, 4.0]
+    rotation: 0
+    state: true
+- name: rrc_delay
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: RRC filter delay in symbol periods
+    short_id: ''
+    type: intx
+    value: '25'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [184, 116.0]
+    rotation: 0
+    state: true
+- name: rrc_nfilts
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: number of branches on the polyphase RRC filter
+    short_id: ''
+    type: intx
+    value: '128'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [344, 116.0]
+    rotation: 0
+    state: true
+- name: snr
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: starting SNR in dB
+    short_id: ''
+    type: eng_float
+    value: '10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [472, 340.0]
+    rotation: 0
+    state: true
+- name: sps
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: oversampling ratio in samples per symbol
+    short_id: o
+    type: eng_float
+    value: '2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [344, 4.0]
+    rotation: 0
+    state: true
+- name: sym_rate
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: symbol rate in bauds
+    short_id: s
+    type: intx
+    value: '1000000000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [184, 4.0]
+    rotation: 0
+    state: true
+- name: sym_sync_damping
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: symbol synchronizer's damping factor
+    short_id: ''
+    type: eng_float
+    value: '1.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [848, 116.0]
+    rotation: 0
+    state: true
+- name: sym_sync_loop_bw
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: symbol synchronizer's loop bandwidth
+    short_id: ''
+    type: eng_float
+    value: '0.0045'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [680, 116.0]
+    rotation: 0
+    state: true
+- name: tabs
+  id: qtgui_tab_widget
+  parameters:
+    alias: ''
+    comment: ''
+    gui_hint: 0,0
+    label0: Simulation
+    label1: Frequency Correction
+    label10: Tab 10
+    label11: Tab 11
+    label12: Tab 12
+    label13: Tab 13
+    label14: Tab 14
+    label15: Tab 15
+    label16: Tab 16
+    label17: Tab 17
+    label18: Tab 18
+    label19: Tab 19
+    label2: Symbol Sync
+    label3: Frame Recovery
+    label4: Phase Recovery
+    label5: Jammer
+    label6: Tab 6
+    label7: Tab 7
+    label8: Tab 8
+    label9: Tab 9
+    num_tabs: '6'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [0, 164.0]
+    rotation: 0
+    state: enabled
+- name: virtual_sink_1_0
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: phy-channel-in
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 612.0]
+    rotation: 180
+    state: true
+- name: virtual_sink_1_0_0
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: jam-channel-in
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 844.0]
+    rotation: 180
+    state: true
+- name: virtual_source_1_0_0
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: phy-channel-in
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1216, 556.0]
+    rotation: 0
+    state: true
+- name: virtual_source_1_0_0_0
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: jam-channel-in
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1216, 780.0]
+    rotation: 0
+    state: true
+
+connections:
+- [blocks_add_xx_0, '0', dvbs2rx_rx_hier_0, '0']
+- [blocks_file_source_0_0, '0', dtv_dvb_bbheader_bb_0, '0']
+- [blocks_file_source_0_0_0, '0', dtv_dvb_bbheader_bb_0_0, '0']
+- [blocks_multiply_const_vxx_0, '0', blocks_add_xx_0, '0']
+- [blocks_multiply_const_vxx_0_0, '0', blocks_add_xx_0, '1']
+- [blocks_rotator_cc_foffset_sim, '0', blocks_multiply_const_vxx_0, '0']
+- [blocks_rotator_cc_foffset_sim_0, '0', blocks_multiply_const_vxx_0_0, '0']
+- [blocks_throttle_0, '0', virtual_sink_1_0, '0']
+- [blocks_throttle_0_0, '0', virtual_sink_1_0_0, '0']
+- [dtv_dvb_bbheader_bb_0, '0', dtv_dvb_bbscrambler_bb_0, '0']
+- [dtv_dvb_bbheader_bb_0_0, '0', dtv_dvb_bbscrambler_bb_0_0, '0']
+- [dtv_dvb_bbscrambler_bb_0, '0', dtv_dvb_bch_bb_0, '0']
+- [dtv_dvb_bbscrambler_bb_0_0, '0', dtv_dvb_bch_bb_0_0, '0']
+- [dtv_dvb_bch_bb_0, '0', dtv_dvb_ldpc_bb_0, '0']
+- [dtv_dvb_bch_bb_0_0, '0', dtv_dvb_ldpc_bb_0_0, '0']
+- [dtv_dvb_ldpc_bb_0, '0', dtv_dvbs2_interleaver_bb_0, '0']
+- [dtv_dvb_ldpc_bb_0_0, '0', dtv_dvbs2_interleaver_bb_0_0, '0']
+- [dtv_dvbs2_interleaver_bb_0, '0', dtv_dvbs2_modulator_bc_0, '0']
+- [dtv_dvbs2_interleaver_bb_0_0, '0', dtv_dvbs2_modulator_bc_0_0, '0']
+- [dtv_dvbs2_modulator_bc_0, '0', dtv_dvbs2_physical_cc_0, '0']
+- [dtv_dvbs2_modulator_bc_0_0, '0', dtv_dvbs2_physical_cc_0_0, '0']
+- [dtv_dvbs2_physical_cc_0, '0', interp_fir_filter_xxx_0, '0']
+- [dtv_dvbs2_physical_cc_0_0, '0', interp_fir_filter_xxx_0_0, '0']
+- [dvbs2rx_rx_hier_0, '0', blocks_file_sink_0, '0']
+- [dvbs2rx_rx_hier_0, '1', qtgui_const_sink_x_1_0, '0']
+- [dvbs2rx_rx_hier_0, '2', qtgui_const_sink_x_1, '0']
+- [dvbs2rx_rx_hier_0, '2', qtgui_time_sink_x_1, '0']
+- [dvbs2rx_rx_hier_0, '3', qtgui_freq_sink_x_0, '1']
+- [dvbs2rx_rx_hier_0, '4', qtgui_freq_sink_x_0, '0']
+- [interp_fir_filter_xxx_0, '0', blocks_throttle_0, '0']
+- [interp_fir_filter_xxx_0_0, '0', blocks_throttle_0_0, '0']
+- [virtual_source_1_0_0, '0', blocks_rotator_cc_foffset_sim, '0']
+- [virtual_source_1_0_0_0, '0', blocks_rotator_cc_foffset_sim_0, '0']
+
+metadata:
+  file_format: 1
