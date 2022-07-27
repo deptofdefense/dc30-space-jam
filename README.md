@@ -46,7 +46,7 @@ Most of the relevant physical modeling implementation is contained in `engine.js
 
 # DVB-S2 Jamming Simulation Flowgraph
 
-This GNU Radio Flowgraph is built around the OOT module `gr-dvbs2rx` (https://github.com/igorauad/gr-dvbs2rx/issues). It allows for the basic end-to-end simulation of two DVB-S2 transmissions combined into a single receiver for demodulation.
+This GNU Radio Flowgraph is built around the OOT module `gr-dvbs2rx` (https://github.com/igorauad/gr-dvbs2rx). It allows for the basic end-to-end simulation of two DVB-S2 transmissions combined into a single receiver for demodulation.
 
 To run the flowgraphs, you will need to install the OOT module for gnuradio companion as directed here: https://github.com/igorauad/gr-dvbs2rx/blob/master/docs/installation.md
 
